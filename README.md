@@ -17,7 +17,7 @@ Just trying to solve it to improve myself.
 - [x] [Naive receiver](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/naive-receiver)
 - [x] [Truster](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/truster)
 - [x] [Side Entrance](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/side-entrance)
-- [ ] [The Rewarder](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/the-rewarder)
+- [x] [The Rewarder](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/the-rewarder)
 - [ ] [Selfie](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/selfie)
 - [ ] [Compromised](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/compromised)
 - [ ] [Puppet](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/puppet)
