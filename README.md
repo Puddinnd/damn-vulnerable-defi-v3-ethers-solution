@@ -19,7 +19,7 @@ Just trying to solve it to improve myself.
 - [x] [Side Entrance](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/side-entrance)
 - [x] [The Rewarder](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/the-rewarder)
 - [x] [Selfie](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/selfie)
-- [ ] [Compromised](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/compromised)
+- [x] [Compromised](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/compromised)
 - [ ] [Puppet](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/puppet)
 - [ ] [Puppet V2](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/puppet-v2)
 - [ ] [Free Rider](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/free-rider)
