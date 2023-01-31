@@ -21,7 +21,7 @@ Just trying to solve it to improve myself.
 - [x] [Selfie](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/selfie)
 - [x] [Compromised](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/compromised)
 - [ ] [Puppet](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/puppet)
-- [ ] [Puppet V2](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/puppet-v2)
+- [x] [Puppet V2](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/puppet-v2)
 - [ ] [Free Rider](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/free-rider)
 - [ ] [Backdoor](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/backdoor)
 - [ ] [Climber](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/climber)

