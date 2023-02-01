@@ -27,4 +27,4 @@ Just trying to solve it to improve myself.
 - [x] [Climber](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/climber)
 - [ ] [Wallet Mining](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/wallet-mining)
 - [ ] [Puppet V3](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/puppet-v3)
-- [ ] [ABI Smuggling](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/abi-smuggling)
+- [x] [ABI Smuggling](https://github.com/CokeFung/damn-vulnerable-defi-v3-ethers-solution/tree/main/test/abi-smuggling)
