@@ -186,7 +186,7 @@ describe('[Challenge] Wallet mining', function () {
         let round = initialWalletDeployerTokenBalance / parseInt(await walletDeployer.pay());
         console.log(`round: ${round}`);
         while(round > 0){
-            let r = round > 10 ? 10 : round;
+            let r = round > 10 ? 10 : round; /// create 10 per round due to the gas limit
             await (await ethers.getContractFactory('WalletDeployerAttacker', player)).deploy(
                 walletDeployer.address,
                 r,
