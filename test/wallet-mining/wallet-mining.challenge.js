@@ -175,10 +175,10 @@ describe('[Challenge] Wallet mining', function () {
         /**
          * contrtact: 
          * create at: https://goerli.etherscan.io/tx/0x0655d75ceaa1d5692690ac21be73c66dec5f2e861fdc2d0a9d4871cfe30b948c
-         * nonce was 9 when deploying a contract to DEPOSIT_ADDRESS
+         * nonce was 9 when deploying a contract to DEPOSIT_ADDRESS on goerli chain
          * and we want to to do it 43 rounds anyway
-         * just implement the transfer token logic in module contract
-         * at round 9th, we will get 20000000 DVT from DEPOSIT_ADDRESS
+         * just implement the transferring token logic in module contract
+         * at round 10th, we will get 20000000 DVT from DEPOSIT_ADDRESS
          */
         console.log(`--- Draining token from walletDeployer contract ---`);
         console.log(`token.balance[player]: ${ethers.utils.formatEther(await token.balanceOf(player.address))} DVT`);
